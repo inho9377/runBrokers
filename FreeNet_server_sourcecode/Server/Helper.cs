@@ -25,11 +25,6 @@ namespace Logic
 
             return msg;
         }
-
-        public static void ReflectPacketBroadcast(PROTOCOL sendProtocol, CPacket msg, CGameRoom room)
-        {
-            CPacket packet = CPacket.create((short)sendProtocol);
-
-        }
+        
     }
 }

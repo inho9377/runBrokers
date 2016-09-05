@@ -49,7 +49,6 @@
     <Compile Include="CPacketBufferManager.cs" />
     <Compile Include="CUserToken.cs" />
     <Compile Include="IPeer.cs" />
-    <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CMessageResolver.cs" />
     <Compile Include="SocketAsyncEventArgsPool.cs" />

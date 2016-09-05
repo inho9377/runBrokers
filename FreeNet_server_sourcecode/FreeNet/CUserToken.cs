@@ -148,14 +148,11 @@ namespace FreeNet
 
 			lock (this.cs_sending_queue)
 			{
-				// count가 0이하일 경우는 없겠지만...
 				if (this.sending_queue.Count <= 0)
 				{
 					throw new Exception("Sending queue count is less than zero!");
 				}
-
-				//todo:재전송 로직 다시 검토~~ 테스트 안해봤음.
-				// 패킷 하나를 다 못보낸 경우는??
+                
 				int size = this.sending_queue.Peek().position;
 				if (e.BytesTransferred != size)
 				{
@@ -165,44 +162,22 @@ namespace FreeNet
 				}
 
 
-				//System.Threading.Interlocked.Increment(ref sent_count);
 				lock (cs_count)
 				{
 					++sent_count;
-					//if (sent_count % 20000 == 0)
-					{
 						Console.WriteLine(string.Format("process send : {0}, transferred {1}, sent count {2}",
 							e.SocketError, e.BytesTransferred, sent_count));
-					}
+					
 				}
 
-				//Console.WriteLine(string.Format("process send : {0}, transferred {1}, sent count {2}",
-				//	e.SocketError, e.BytesTransferred, sent_count));
-
-				// 전송 완료된 패킷을 큐에서 제거한다.
-				//CPacket packet = this.sending_queue.Dequeue();
-				//CPacket.destroy(packet);
 				this.sending_queue.Dequeue();
 
-				// 아직 전송하지 않은 대기중인 패킷이 있다면 다시한번 전송을 요청한다.
 				if (this.sending_queue.Count > 0)
 				{
 					start_send();
 				}
 			}
 		}
-
-		//void send_directly(CPacket msg)
-		//{
-		//	msg.record_size();
-		//	this.send_event_args.SetBuffer(this.send_event_args.Offset, msg.position);
-		//	Array.Copy(msg.buffer, 0, this.send_event_args.Buffer, this.send_event_args.Offset, msg.position);
-		//	bool pending = this.socket.SendAsync(this.send_event_args);
-		//	if (!pending)
-		//	{
-		//		process_send(this.send_event_args);
-		//	}
-		//}
 
 		public void disconnect()
 		{

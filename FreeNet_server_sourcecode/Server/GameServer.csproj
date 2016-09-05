@@ -45,19 +45,16 @@
     <Compile Include="CGameRoom.cs" />
     <Compile Include="CGameServer.cs" />
     <Compile Include="CGameUser.cs" />
-    <Compile Include="CHelper.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="CPlayer.cs" />
     <Compile Include="CRoomManager.cs" />
     <Compile Include="CWaitRoom.cs" />
     <Compile Include="DB.cs" />
-    <Compile Include="GameSetting.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="PacketProcess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protocol.cs" />
-    <Compile Include="Vector2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -9,14 +9,7 @@ namespace FreeNet
 	{
 		public static readonly short HEADERSIZE = 2;
 	}
-
-	/// <summary>
-	/// [header][body] 구조를 갖는 데이터를 파싱하는 클래스.
-	/// - header : 데이터 사이즈. Defines.HEADERSIZE에 정의된 타입만큼의 크기를 갖는다.
-	///				2바이트일 경우 Int16, 4바이트는 Int32로 처리하면 된다.
-	///				본문의 크기가 Int16.Max값을 넘지 않는다면 2바이트로 처리하는것이 좋을것 같다.
-	/// - body : 메시지 본문.
-	/// </summary>
+    
 	class CMessageResolver
 	{
 		public delegate void CompletedMessageCallback(Const<byte[]> buffer);
@@ -44,16 +37,7 @@ namespace FreeNet
 			this.position_to_read = 0;
 			this.remain_bytes = 0;
 		}
-
-		/// <summary>
-		/// 목표지점으로 설정된 위치까지의 바이트를 원본 버퍼로부터 복사한다.
-		/// 데이터가 모자랄 경우 현재 남은 바이트 까지만 복사한다.
-		/// </summary>
-		/// <param name="buffer"></param>
-		/// <param name="offset"></param>
-		/// <param name="transffered"></param>
-		/// <param name="size_to_read"></param>
-		/// <returns>다 읽었으면 true, 데이터가 모자라서 못 읽었으면 false를 리턴한다.</returns>
+        
 		bool read_until(byte[] buffer, ref int src_position, int offset, int transffered)
 		{
 			if (this.current_position >= offset + transffered)
@@ -65,8 +49,8 @@ namespace FreeNet
 			// 읽어와야 할 바이트.
 			// 데이터가 분리되어 올 경우 이전에 읽어놓은 값을 빼줘서 부족한 만큼 읽어올 수 있도록 계산해 준다.
 			int copy_size = this.position_to_read - this.current_position;
+            
 
-			// 앗! 남은 데이터가 더 적다면 가능한 만큼만 복사한다.
 			if (this.remain_bytes < copy_size)
 			{
 				copy_size = this.remain_bytes;
@@ -93,15 +77,7 @@ namespace FreeNet
 
 			return true;
 		}
-
-		/// <summary>
-		/// 소켓 버퍼로부터 데이터를 수신할 때 마다 호출된다.
-		/// 데이터가 남아 있을 때 까지 계속 패킷을 만들어 callback을 호출 해 준다.
-		/// 하나의 패킷을 완성하지 못했다면 버퍼에 보관해 놓은 뒤 다음 수신을 기다린다.
-		/// </summary>
-		/// <param name="buffer"></param>
-		/// <param name="offset"></param>
-		/// <param name="transffered"></param>
+        
 		public void on_receive(byte[] buffer, int offset, int transffered, CompletedMessageCallback callback)
 		{
 			// 이번 receive로 읽어오게 될 바이트 수.

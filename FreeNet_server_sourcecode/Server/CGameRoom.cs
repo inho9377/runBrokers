@@ -57,7 +57,7 @@ namespace Logic
             }
         }
 
-
+        //owner외의 플레이어에게 broadcast한다.
         public void broadcast(CPacket msg, CPlayer owner)
         {
             foreach (CPlayer player in players)
@@ -100,6 +100,8 @@ namespace Logic
             TimeCheck();
         }
 
+
+        //방에 입장하는 인원들이 모두 로딩을 끝냈는지 체크
         public bool isLoadComplete()
         {
             numLoading++;
@@ -111,6 +113,7 @@ namespace Logic
 
         void TimeCheck()
         {
+            //시간 종료 체크
             if (stop_watch.ElapsedMilliseconds >= limitTime * 1000)
             {
                 Console.WriteLine("set : " + stop_watch.ElapsedMilliseconds);
@@ -119,6 +122,7 @@ namespace Logic
                 return;
             }
 
+            //intervalTime(10s)마다 알림을 보냄
             if (stop_watch.ElapsedMilliseconds >= time_index * termSec * 1000)
             {
                 time_index++;
@@ -132,6 +136,8 @@ namespace Logic
 
         }
 
+
+        //게임 종료 후 방의 세팅을 원상복귀함
         void GameSet()
         {
             CPacket msg = CPacket.create((short)PROTOCOL.TIME_OVER);

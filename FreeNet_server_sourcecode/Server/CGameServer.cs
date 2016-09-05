@@ -29,7 +29,7 @@ namespace Logic
             this.user_operations = new Queue<CPacket>();
             
             this.room_manager = new CRoomManager();
-            //this.matching_waiting_users = new List<CGameUser>();
+
             this.data_base = new DB();
             data_base.InitDB("localhost", "runbroker", "root", "741963");
 
@@ -82,9 +82,6 @@ namespace Logic
 
         void process_receive(CPacket msg)
         {
-            //todo:
-            // user msg filter 체크.
-
             msg.owner.process_user_operation(msg);
         }
 

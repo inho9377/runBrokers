@@ -54,6 +54,7 @@ namespace Logic
             string id = msg.pop_string();
             string pwd = msg.pop_string();
 
+            //가입된 회원이 아니면 로그인 불가
             if(!Program.game_main.data_base.IsUserExist(id, pwd))
             {
                 CPacket send_fail_msg = CPacket.create((short)PROTOCOL.LOGIN_FAIL);
@@ -63,21 +64,21 @@ namespace Logic
 
 
             this.owner.id = id;
-            //Program.game_main.data_base.RegisterUser(id, pwd);
 
             CWaitRoom room = Program.game_main.room_manager.FindLeisureWaitRoom(this.owner);
 
+
+            //들어갈 수 있는 방이 없으면 (FULL_ROOM) 로그인 불가
             if(room == null)
             {
                 CPacket fullRoomMsg = CPacket.create((short)PROTOCOL.FULL_ROOM);
                 this.owner.send(fullRoomMsg);
                 return;
-                //full room 보냄
             }
 
             List<CPlayer> other_players = room.playerList;
 
-            //중복 유저 존재하면 로그인 불가
+            // 유저가 이미 게임상에 로그인되어있으면 로그인 불가
             foreach(CPlayer player in other_players)
             {
                 if(player.owner.id == id)
@@ -93,10 +94,9 @@ namespace Logic
             send_msg.push(owner.player.player_index);
             send_msg.push((Int16)other_players.Count);
 
+            //로그인 하는 유저한테 이미 접속되어있고 같은 방에 있는 유저의 정보를 전달한다.
             foreach(CPlayer player in other_players)
             {
-                //if (player.player_index == this.owner.player.player_index)
-                //    continue;
                 send_msg.push(player.player_index);
                 send_msg.push(player.owner.id);
                 send_msg.push((byte)player.player_color);
@@ -105,9 +105,7 @@ namespace Logic
             }
 
             owner.send(send_msg);
-
-            //waitroom처리해야함
-            //login ntf보내야함
+            
             room.EnterWaitRoom(owner);
             owner.enter_wait_room(owner.player, room);
 
@@ -172,13 +170,16 @@ namespace Logic
 
             owner.wait_room.SetReady(owner.player);
 
+            //Ready 했음을 broadcast
             CPacket ready_msg = CPacket.create((short)PROTOCOL.READY_NTF);
             ready_msg.push(owner.player.player_index);
             owner.wait_room.broadcast(ready_msg);
 
+            //대기방 내에 플레이어가 1명이면 게임을 시작할 수 없다.
             if (owner.wait_room.playerList.Count == 1)
                 return;
 
+            //방 내에 모든 사람이 레디 상태이면 게임 시작
             if(owner.wait_room.isGameStart())
             {
                 CGameRoom room = Program.game_main.room_manager.CreateGameRoom(owner.wait_room.playerList);
@@ -194,27 +195,31 @@ namespace Logic
                 owner.wait_room.GameStart();
                 
                 room.broadcast(send_msg);
-                //room.GameStart(60);
             }
 
 
         }
         
+        //정기적으로 받는 플레이어의 위치를 받아 그대로 broadcast한다.
         void PlayerPosReq(CPacket msg)
         {
             float positionX = msg.pop_float();
             float positionY = msg.pop_float();
             float positionZ = msg.pop_float();
             float speed = msg.pop_float();
+
             CPacket send_msg = CPacket.create((short)PROTOCOL.PLAYER_POSITION_NTF);
+
             send_msg.push(owner.player.player_index);
             send_msg.push(positionX);
             send_msg.push(positionY);
             send_msg.push(positionZ);
             send_msg.push(speed);
+
             owner.battle_room.broadcast(send_msg, owner.player);
         }
 
+        //게임의 결과를 받아 DB에 반영
         void GameResult(CPacket msg)
         {
             int isWin = msg.pop_int16();
@@ -223,6 +228,7 @@ namespace Logic
 
             Program.game_main.data_base.UpdateGameResult(owner.id, isWin == 1);
         }
+
 
         void SkillUse(CPacket msg)
         {
@@ -235,10 +241,12 @@ namespace Logic
         {
             float positionX = msg.pop_float();
             float positionZ = msg.pop_float();
+
             CPacket send_msg = CPacket.create((short)PROTOCOL.TELEPORT_NTF);
             send_msg.push(owner.player.player_index);
             send_msg.push(positionX);
             send_msg.push(positionZ);
+
             owner.battle_room.broadcast(send_msg, owner.player);
         }
 
@@ -249,6 +257,7 @@ namespace Logic
             CPacket send_msg = CPacket.create((short)PROTOCOL.ITEM_USE_NTF);
             send_msg.push(owner.player.player_index);
             send_msg.push(item_index);
+
             owner.battle_room.broadcast(send_msg, owner.player);
         }
 
@@ -258,17 +267,21 @@ namespace Logic
             byte item_index = msg.pop_byte();
             float positionX = msg.pop_float();
             float positionZ = msg.pop_float();
+
             CPacket send_msg = CPacket.create((short)PROTOCOL.TELEPORT_ITEM_NTF);
+
             send_msg.push(owner.player.player_index);
             send_msg.push(item_index);
             send_msg.push(positionX);
             send_msg.push(positionZ);
+
             owner.battle_room.broadcast(send_msg, owner.player);
         }
 
-
+        
         void LoadingComplete(CPacket msg)
         {
+            //방 내에 모든 인원이 로딩을 완료해야 게임이 시작된다.
             if(owner.battle_room.isLoadComplete())
             {
                 CPacket send_msg = CPacket.create((short)PROTOCOL.LOADING_COMPLETE_NTF);

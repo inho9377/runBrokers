@@ -55,10 +55,7 @@ namespace Logic
                 
 
                 CGameRoom room = user.battle_room;
-                if (room != null)
-                {
-                    //game_main.room_manager.remove_game_room(user.battle_room);
-                }
+                
             }
         }
     }

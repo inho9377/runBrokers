@@ -4,8 +4,7 @@ namespace Logic
 {
     public enum PROTOCOL : short
     {
-
-        CONNECT_SUCCESS = 1,
+        
 
         /*
          * string Id
@@ -53,8 +52,7 @@ namespace Logic
          * PlayerType change_type
          */
         TYPE_CHANGE_REQ = 10,
-
-        TYPE_CHANGE_RES = 11,
+        
 
         /*
         * byte player_index
@@ -66,22 +64,18 @@ namespace Logic
         * PlayerColor change_color  : byte
         */
         COLOR_CHANGE_REQ = 20,
-
-        COLOR_CHANGE_RES = 21,
+        
 
         /*
         * byte player_index
         * PlayerColor change_color : byte
         */
         COLOR_CHANGE_NTF = 22,
-
-        /*
-        */
+        
 
         READY_REQ = 30,
 
-
-        READY_RES = 31,
+        
 
         /*
         * byte player_index
@@ -103,12 +97,10 @@ namespace Logic
          * int playTimeSec
          */
         PLAY_TIME = 80,
+        
 
-
-        /*
-         * 
-         */
         TIME_OVER = 82,
+
         /*
          * float player_positionX
          * float player_positionY
@@ -139,10 +131,7 @@ namespace Logic
         */
         GAME_RESULT = 110,
 
-
-        /*
-         * 
-         */
+        
         SKILL_USE_REQ = 120,
 
         /*
@@ -189,9 +178,7 @@ namespace Logic
          */
         TELEPORT_ITEM_NTF = 142,
 
-
-        /*
-        */
+        
         LOADING_COMPLETE_REQ = 150,
         LOADING_COMPLETE_NTF = 151,
     }

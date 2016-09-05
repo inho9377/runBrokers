@@ -29,12 +29,7 @@ namespace FreeNet
 			this.connected_count = 0;
 			this.session_created_callback = null;
 		}
-
-		// Initializes the server by preallocating reusable buffers and 
-		// context objects.  These objects do not need to be preallocated 
-		// or reused, but it is done this way to illustrate how the API can 
-		// easily be used to create reusable objects to increase server performance.
-		//
+        
 		public void initialize()
 		{
 			this.max_connections = 10000;
@@ -43,12 +38,9 @@ namespace FreeNet
 			this.buffer_manager = new BufferManager(this.max_connections * this.buffer_size * this.pre_alloc_count, this.buffer_size);
 			this.receive_event_args_pool = new SocketAsyncEventArgsPool(this.max_connections);
 			this.send_event_args_pool = new SocketAsyncEventArgsPool(this.max_connections);
-
-			// Allocates one large byte buffer which all I/O operations use a piece of.  This gaurds 
-			// against memory fragmentation
+            
 			this.buffer_manager.InitBuffer();
-
-			// preallocate pool of SocketAsyncEventArgs objects
+            
 			SocketAsyncEventArgs arg;
 
 			for (int i = 0; i < this.max_connections; i++)
@@ -97,17 +89,11 @@ namespace FreeNet
 		}
 
 		/// <summary>
-		/// todo:검토중...
 		/// 원격 서버에 접속 성공 했을 때 호출됩니다.
 		/// </summary>
 		/// <param name="socket"></param>
 		public void on_connect_completed(Socket socket, CUserToken token)
 		{
-			// SocketAsyncEventArgsPool에서 빼오지 않고 그때 그때 할당해서 사용한다.
-			// 풀은 서버에서 클라이언트와의 통신용으로만 쓰려고 만든것이기 때문이다.
-			// 클라이언트 입장에서 서버와 통신을 할 때는 접속한 서버당 두개의 EventArgs만 있으면 되기 때문에 그냥 new해서 쓴다.
-			// 서버간 연결에서도 마찬가지이다.
-			// 풀링처리를 하려면 c->s로 가는 별도의 풀을 만들어서 써야 한다.
 			SocketAsyncEventArgs receive_event_arg = new SocketAsyncEventArgs();
 			receive_event_arg.Completed += new EventHandler<SocketAsyncEventArgs>(receive_completed);
 			receive_event_arg.UserToken = token;
@@ -128,16 +114,13 @@ namespace FreeNet
         /// <param name="client_socket"></param>
 		void on_new_client(Socket client_socket, object token)
 		{
-            //todo:
-            // peer list처리.
 
 			Interlocked.Increment(ref this.connected_count);
 
 			Console.WriteLine(string.Format("[{0}] A client connected. handle {1},  count {2}",
 				Thread.CurrentThread.ManagedThreadId, client_socket.Handle,
 				this.connected_count));
-
-			// 플에서 하나 꺼내와 사용한다.
+            
 			SocketAsyncEventArgs receive_args = this.receive_event_args_pool.Pop();
 			SocketAsyncEventArgs send_args = this.send_event_args_pool.Pop();
 
@@ -149,8 +132,8 @@ namespace FreeNet
 			}
 
 			begin_receive(client_socket, receive_args, send_args);
-			//user_token.start_keepalive();
-		}
+
+        }
 
 		void begin_receive(Socket socket, SocketAsyncEventArgs receive_args, SocketAsyncEventArgs send_args)
 		{
@@ -166,10 +149,7 @@ namespace FreeNet
 				process_receive(receive_args);
 			}
 		}
-
-		// This method is called whenever a receive or send operation is completed on a socket 
-		//
-		// <param name="e">SocketAsyncEventArg associated with the completed receive operation</param>
+        
 		void receive_completed(object sender, SocketAsyncEventArgs e)
 		{
 			if (e.LastOperation == SocketAsyncOperation.Receive)
@@ -180,19 +160,13 @@ namespace FreeNet
 
 			throw new ArgumentException("The last operation completed on the socket was not a receive.");
 		}
-
-		// This method is called whenever a receive or send operation is completed on a socket 
-		//
-		// <param name="e">SocketAsyncEventArg associated with the completed send operation</param>
+        
 		void send_completed(object sender, SocketAsyncEventArgs e)
 		{
 			CUserToken token = e.UserToken as CUserToken;
 			token.process_send(e);
 		}
-
-		// This method is invoked when an asynchronous receive operation completes. 
-		// If the remote host closed the connection, then the socket is closed.  
-		//
+        
 		private void process_receive(SocketAsyncEventArgs e)
 		{
 			// check if the remote host closed the connection
@@ -218,10 +192,6 @@ namespace FreeNet
 		public void close_clientsocket(CUserToken token)
 		{
 			token.on_removed();
-
-			// Free the SocketAsyncEventArg so they can be reused by another client
-			// 버퍼는 반환할 필요가 없다. SocketAsyncEventArg가 버퍼를 물고 있기 때문에
-			// 이것을 재사용 할 때 물고 있는 버퍼를 그대로 사용하면 되기 때문이다.
 			if (this.receive_event_args_pool != null)
 			{
 				this.receive_event_args_pool.Push(token.receive_event_args);

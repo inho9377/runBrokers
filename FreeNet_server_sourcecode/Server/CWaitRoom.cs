@@ -13,6 +13,8 @@ namespace Logic
 
 
         public List<CPlayer> playerList;
+
+        // 플레이어가 Ready상태인지 체크
         Dictionary<byte, bool> ReadyStateDict;
 
         public CWaitRoom()
@@ -20,7 +22,7 @@ namespace Logic
             this.playerList = new List<CPlayer>();
             this.ReadyStateDict = new Dictionary<byte, bool>();
         }
-        //Todo : Ready Error
+
         public void EnterWaitRoom(CGameUser user)
         {
             playerList.Add(user.player);
@@ -49,11 +51,7 @@ namespace Logic
             foreach(CPlayer player in playerList)
             {
                 ReadyStateDict.Add(player.player_index, false);
-            }/*
-            foreach (KeyValuePair<byte, bool> i in ReadyStateDict)
-            {
-                ReadyStateDict[i.Key] = false;
-            }*/
+            }
         }
 
         public bool isAllReady()
@@ -93,7 +91,6 @@ namespace Logic
         {
             foreach (CPlayer player in playerList)
             {
-                //Todo : 플레이어.send가 그 플레이어 한테 보내는건가 그 플레이어 가 보내는건가
                 if (player.player_index != owner.player_index)
                     player.send(msg);
             }

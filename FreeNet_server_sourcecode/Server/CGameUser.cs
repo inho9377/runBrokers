@@ -37,7 +37,6 @@ namespace Logic
 
         void IPeer.on_message(Const<byte[]> buffer)
         {
-            // ex)
             byte[] clone = new byte[1024];
             Array.Copy(buffer.Value, clone, buffer.Value.Length);
             CPacket msg = new CPacket(clone, this);

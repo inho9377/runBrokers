@@ -5,6 +5,7 @@ using System.Text;
 
 namespace FreeNet
 {
+    //패킷 풀을 관리
 	public class CPacketBufferManager
 	{
 		static object cs_buffer = new object();

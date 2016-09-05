@@ -18,7 +18,7 @@ namespace Logic
         public void InitDB(string serverName, string dbName, string id, string pw)
         {
             string strconn = "server=" + serverName + ";Database=" + dbName
-                + ";Uid=" + id + ";Pwd=" + pw; //+  ";Charset=utf8";
+                + ";Uid=" + id + ";Pwd=" + pw;
             conn = new MySqlConnection(strconn);
             ds = new DataSet();
         }
@@ -62,8 +62,6 @@ namespace Logic
         public bool IsUserExist(string id)
         {
 
-
-
             string sql = "SELECT * FROM user_info WHERE id = '" + id + "'";
 
             conn.Open();
@@ -105,34 +103,7 @@ namespace Logic
             else
                 return false;
         }
-
-            
-            private void SelectData()
-        {
-            
-            try
-            {
-                DataSet ds = new DataSet();
-                
-                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT id,pwd,name FROM members";
-                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
-                adpt.Fill(ds, "members");
-                if (ds.Tables.Count > 0)
-                {
-                    foreach (DataRow r in ds.Tables[0].Rows)
-                    {
-                        Console.WriteLine(r["name"]);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace);
-            }
-        }
-
-    
+        
 
     public void Insert(string table, List<string> columns, List<dynamic> values)
         {

@@ -18,7 +18,6 @@ namespace FreeNet
 
 		public static CPacket create(Int16 protocol_id)
 		{
-			//CPacket packet = new CPacket();
 			CPacket packet = CPacketBufferManager.pop();
 			packet.set_protocol(protocol_id);
 			return packet;
@@ -31,11 +30,8 @@ namespace FreeNet
 
 		public CPacket(byte[] buffer, IPeer owner)
 		{
-			// 참조로만 보관하여 작업한다.
-			// 복사가 필요하면 별도로 구현해야 한다.
 			this.buffer = buffer;
 
-			// 헤더는 읽을필요 없으니 그 이후부터 시작한다.
 			this.position = Defines.HEADERSIZE;
 
 			this.owner = owner;
@@ -89,8 +85,7 @@ namespace FreeNet
 			this.position += sizeof(Int32);
 			return data;
 		}
-
-        //todo : 검증필요
+        
         public float pop_float()
         {
             float data = BitConverter.ToSingle(this.buffer, this.position);
@@ -104,7 +99,7 @@ namespace FreeNet
 			Int16 len = BitConverter.ToInt16(this.buffer, this.position);
 			this.position += sizeof(Int16);
 
-			// 인코딩은 utf8로 통일한다.
+			// 인코딩은 utf8로 통일
 			string data = System.Text.Encoding.UTF8.GetString(this.buffer, this.position, len);
 			this.position += len;
 
@@ -116,9 +111,7 @@ namespace FreeNet
 		public void set_protocol(Int16 protocol_id)
 		{
 			this.protocol_id = protocol_id;
-			//this.buffer = new byte[1024];
-
-			// 헤더는 나중에 넣을것이므로 데이터 부터 넣을 수 있도록 위치를 점프시켜놓는다.
+			
 			this.position = Defines.HEADERSIZE;
 
 			push_int16(protocol_id);
@@ -159,7 +152,7 @@ namespace FreeNet
 			temp_buffer.CopyTo(this.buffer, this.position);
 			this.position += temp_buffer.Length;
 		}
-        //todo : 검증필요
+
         public void push(float data)
         {
             byte[] temp_buffer = BitConverter.GetBytes(data);
