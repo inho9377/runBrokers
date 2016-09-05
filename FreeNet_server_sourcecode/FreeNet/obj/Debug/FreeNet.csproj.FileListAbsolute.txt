@@ -1,0 +1,10 @@
+C:\Users\ino\Dropbox\source\소스코드\FreeNet_server_sourcecode\FreeNet\bin\Debug\FreeNet.dll
+C:\Users\ino\Dropbox\source\소스코드\FreeNet_server_sourcecode\FreeNet\bin\Debug\FreeNet.pdb
+C:\Users\ino\Dropbox\source\소스코드\FreeNet_server_sourcecode\FreeNet\obj\Debug\FreeNet.csprojResolveAssemblyReference.cache
+C:\Users\ino\Dropbox\source\소스코드\FreeNet_server_sourcecode\FreeNet\obj\Debug\FreeNet.dll
+C:\Users\ino\Dropbox\source\소스코드\FreeNet_server_sourcecode\FreeNet\obj\Debug\FreeNet.pdb
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\bin\Debug\FreeNet.dll
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\bin\Debug\FreeNet.pdb
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\obj\Debug\FreeNet.csprojResolveAssemblyReference.cache
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\obj\Debug\FreeNet.dll
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\obj\Debug\FreeNet.pdb

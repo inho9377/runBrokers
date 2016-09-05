@@ -1,0 +1,5 @@
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\bin\Release\FreeNet.dll
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\bin\Release\FreeNet.pdb
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\obj\Release\FreeNet.csprojResolveAssemblyReference.cache
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\obj\Release\FreeNet.dll
+C:\Users\ino\Dropbox\runbroker\FreeNet_server_sourcecode\FreeNet\obj\Release\FreeNet.pdb
